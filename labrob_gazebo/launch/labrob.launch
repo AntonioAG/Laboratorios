@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!--arg name="world_name" value="$(find labrob_gazebo)/worlds/labrob.world"/-->
+    <arg name="world_name" value="$(find labrob_gazebo)/worlds/final_test.world"/>
+  </include>
+
+
+<arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle]"/>
+  <arg name="x_pos" default="8.5"/>
+  <arg name="y_pos" default="-8.5"/>
+  <arg name="z_pos" default="-0.001011"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="3.14159"/>
+  
+  
+  <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3_burger -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -param robot_description" />
+
+
+<!--node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node-->
+
+
+  
+<node name="rviz" pkg="rviz" type="rviz" />
+
+<!--node name="opencv_tutorial_node" pkg="opencv_tutorial" type="opencv_tutorial_node"/-->
+
+
+<include file="$(find turtlebot3_slam)/launch/turtlebot3_slam.launch" />
+
+<include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch" />
+
+<!--node pkg="turtlebot3_teleop" type="turtlebot3_teleop_key" name="turtlebot3_teleop_keyboard"  output="screen" /-->   
+</launch>
